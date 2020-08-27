@@ -1,0 +1,9 @@
+services:
+  skole-skema-service:
+    appDir: app
+    dataDir: data
+    repository: https://github.com/jensandresen/skole-skema-service.git
+    setupCommand: echo setup
+    # runCommand: sh ./run.sh
+    runCommand: echo run
+    teardownCommand: echo teardown
