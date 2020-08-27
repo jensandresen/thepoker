@@ -151,3 +151,7 @@ dmypy.json
 .history
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
+
+### custom
+test_dir/
+.vscode/
