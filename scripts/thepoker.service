@@ -4,7 +4,7 @@ Description=Start thepoker GitObs engine
 [Service]
 Type=oneshot
 User=pi
-ExecStart=(cd {{path-placeholder}} && make run)
+ExecStart=make --directory={{path-placeholder}} run
 
 [Install]
 WantedBy=multi-user.target
