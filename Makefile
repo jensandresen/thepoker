@@ -8,7 +8,7 @@ setup:
 	sudo systemctl enable --now ${TIMER_FILENAME}
 
 run:
-	python src/app.py ${PWD}/services.yml
+	@cd scripts && sh run.sh
 
 test:
 	@SERVICES_DIR=${PWD}/test_dir python src/app.py ${PWD}/services.yml
