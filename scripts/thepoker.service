@@ -1,0 +1,10 @@
+[Unit]
+Description=Start thepoker GitObs engine
+
+[Service]
+Type=oneshot
+User=pi
+ExecStart={{path-placeholder}}
+
+[Install]
+WantedBy=multi-user.target

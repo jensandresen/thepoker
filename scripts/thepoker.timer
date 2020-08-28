@@ -1,0 +1,10 @@
+[Unit]
+Description=Run thepoker every 5 minutes and on boot
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=5min
+AccuracySec=10sec
+
+[Install]
+WantedBy=timers.target
