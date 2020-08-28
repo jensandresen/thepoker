@@ -7,7 +7,7 @@ build:
 
 setup: build
 	sudo cp scripts/$(TIMER_FILENAME) /etc/systemd/system/
-	sudo bash -c 'cat scripts/$(SERVICE_FILENAME) | sed "s:{{path-placeholder}}:${PWD}/make run:g" > /etc/systemd/system/$(SERVICE_FILENAME)'
+	sudo bash -c 'cat scripts/$(SERVICE_FILENAME) | sed "s:{{path-placeholder}}:${PWD}:g" > /etc/systemd/system/$(SERVICE_FILENAME)'
 	sudo systemctl daemon-reload
 	sudo systemctl enable --now $(TIMER_FILENAME)
 
