@@ -12,11 +12,7 @@ setup: build
 	sudo systemctl enable --now $(TIMER_FILENAME)
 
 run:
-	@docker run --rm -d \
-		--restart unless-stopped \
-		-v ${SERVICES_DIR}:/services
-		-e SERVICES_DIR="/services"
-		$(APP_NAME)
+	@docker run --rm -d -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" $(APP_NAME)
 
 test:
 	@SERVICES_DIR=${PWD}/test_dir python src/app.py ${PWD}/services.yml
