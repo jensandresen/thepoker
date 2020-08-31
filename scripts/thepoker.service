@@ -1,10 +1,12 @@
 [Unit]
-Description=Start thepoker GitObs engine
+Description=Start thepoker GitOps engine
 
 [Service]
 Type=oneshot
 User=pi
-ExecStart=make --directory={{path-placeholder}} run
+EnvironmentFile=/etc/environment
+WorkingDirectory={{path-placeholder}}
+ExecStart=/usr/bin/make -C {{path-placeholder}} run
 
 [Install]
 WantedBy=multi-user.target
