@@ -13,7 +13,11 @@ install-timer:
 
 setup: build install-timer
 
-run:
+update:
+	git clean -d
+	git pull
+
+run: update
 	docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" $(APP_NAME)
 
 test:
