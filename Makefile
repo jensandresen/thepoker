@@ -18,11 +18,6 @@ update:
 	git pull
 
 run: update
-	# @echo "dir 1: $(realpath ./)"
-	# @echo "dir 2: $(abspath ./)"
-	# @echo "dir 3: $(shell bash -c 'PWD')"
-	# @echo "dir 4: $(dir ./)"
-
 	docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" -v $(abspath ./services.yml):/app/services.yml $(APP_NAME)
 
 test:
