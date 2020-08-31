@@ -18,12 +18,12 @@ update:
 	git pull
 
 run: update
-	@echo "dir 1: $(realpath ./)"
-	@echo "dir 2: $(abspath ./)"
-	@echo "dir 3: $(shell bash -c 'PWD')"
-	@echo "dir 4: $(dir ./)"
+	# @echo "dir 1: $(realpath ./)"
+	# @echo "dir 2: $(abspath ./)"
+	# @echo "dir 3: $(shell bash -c 'PWD')"
+	# @echo "dir 4: $(dir ./)"
 
-	docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" -v $(shell PWD)/services.yml:/app/services.yml $(APP_NAME)
+	docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" -v $(abspath ./services.yml):/app/services.yml $(APP_NAME)
 
 test:
 	@SERVICES_DIR=${PWD}/test_dir python src/app.py ${PWD}/services.yml
