@@ -24,7 +24,7 @@ run: update
 	@echo "dir 2: $(DIR2)"
 	@echo "dir 3: $(shell PWD)"
 
-	# docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" -v $(shell PWD)/services.yml:/app/services.yml $(APP_NAME)
+	docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" -v $(shell PWD)/services.yml:/app/services.yml $(APP_NAME)
 
 test:
 	@SERVICES_DIR=${PWD}/test_dir python src/app.py ${PWD}/services.yml
