@@ -14,7 +14,7 @@ install-timer:
 setup: build install-timer
 
 update:
-	git clean -d
+	git clean -df
 	git pull
 
 run: update
