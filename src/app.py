@@ -48,8 +48,8 @@ def update_service(service_root, name, properties):
     print('  fetching repository origin...')
     run('git fetch -q origin master')
 
-    # check for any now commits
-    has_changes = run('git log --pretty=format:%H -1 head..origin/master')
+    # check for any new commits
+    has_changes = run('git log --pretty=format:%H -1 ..origin/master')
 
     if has_changes:
         print('  changes detected')
