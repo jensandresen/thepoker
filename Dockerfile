@@ -1,5 +1,8 @@
 FROM python:3.8.5-alpine
 
+RUN apk update
+RUN apk add git
+
 WORKDIR /app
 
 COPY src/requirements.txt ./
