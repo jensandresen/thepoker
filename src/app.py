@@ -24,17 +24,17 @@ def main():
         else:
             create_service(service_dir, service_name, configuration)
 
-def load_services_configuration(filename):
-    with open(filename, 'r') as stream:
-        configuration = yaml.safe_load(stream)
-        return configuration['services']
-
 def get_configuration_filename():
     configuration_filenames = sys.argv[1:]
     if len(configuration_filenames) == 0:
         return None
     else:
         return configuration_filenames[0]
+
+def load_services_configuration(filename):
+    with open(filename, 'r') as stream:
+        configuration = yaml.safe_load(stream)
+        return configuration['services']
 
 def create_service(service_root, name, properties):
     print('create service ' + name)
