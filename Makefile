@@ -17,7 +17,7 @@ update:
 	git clean -df
 	git pull
 
-run: update
+run: update build
 	docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" -v $(abspath ./services.yml):/app/services.yml $(APP_NAME)
 
 test:
