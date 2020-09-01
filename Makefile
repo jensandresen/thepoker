@@ -22,3 +22,8 @@ run: update
 
 test:
 	@SERVICES_DIR=${PWD}/test_dir python src/app.py ${PWD}/services.yml
+
+clean-test-dir:
+	rm -Rf test_dir && mkdir test_dir
+
+fresh-test: clean-test-dir test
