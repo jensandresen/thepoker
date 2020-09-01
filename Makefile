@@ -18,7 +18,12 @@ update:
 	git pull
 
 run: update build
-	docker run -t -v ${SERVICES_DIR}:/services -e SERVICES_DIR="/services" -v $(abspath ./services.yml):/app/services.yml $(APP_NAME)
+	docker run -t \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v ${SERVICES_DIR}:/services \
+		-e SERVICES_DIR="/services" \
+		-v $(abspath ./services.yml):/app/services.yml \
+		$(APP_NAME)
 
 test:
 	@SERVICES_DIR=${PWD}/test_dir python src/app.py ${PWD}/services.yml
