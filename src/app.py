@@ -2,9 +2,39 @@ import os
 import sys
 import yaml
 
-def run(command):
-    with os.popen(command) as stream:
-        return stream.read()
+def main():
+    configuration_filename = get_configuration_filename()
+    if not configuration_filename:
+        print('No configuration file has been specified.')
+        quit()
+
+    services_root = os.environ.get('SERVICES_DIR')
+    if not services_root:
+        print('No services dir has been specified.')
+        quit()
+
+    service_configurations = load_services_configuration(configuration_filename)
+
+    for service_name, configuration in service_configurations.items():
+        os.chdir(services_root)
+        service_dir = os.path.join(services_root, service_name)
+
+        if os.path.isdir(service_dir):
+            update_service(service_dir, service_name, configuration)
+        else:
+            create_service(service_dir, service_name, configuration)
+
+def load_services_configuration(filename):
+    with open(filename, 'r') as stream:
+        configuration = yaml.safe_load(stream)
+        return configuration['services']
+
+def get_configuration_filename():
+    configuration_filenames = sys.argv[1:]
+    if len(configuration_filenames) == 0:
+        return None
+    else:
+        return configuration_filenames[0]
 
 def create_service(service_root, name, properties):
     print('create service ' + name)
@@ -70,38 +100,8 @@ def update_service(service_root, name, properties):
     else:
         print('  no changes detected')
 
-def load_services_configuration(filename):
-    with open(filename, 'r') as stream:
-        configuration = yaml.safe_load(stream)
-        return configuration['services']
-
-def get_configuration_filename():
-    configuration_filenames = sys.argv[1:]
-    if len(configuration_filenames) == 0:
-        return None
-    else:
-        return configuration_filenames[0]
-
-def main():
-    configuration_filename = get_configuration_filename()
-    if not configuration_filename:
-        print('No configuration file has been specified.')
-        quit()
-
-    services_root = os.environ.get('SERVICES_DIR')
-    if not services_root:
-        print('No services dir has been specified.')
-        quit()
-
-    service_configurations = load_services_configuration(configuration_filename)
-
-    for attr, value in service_configurations.items():
-        os.chdir(services_root)
-        service_dir = os.path.join(services_root, attr)
-
-        if os.path.isdir(service_dir):
-            update_service(service_dir, attr, value)
-        else:
-            create_service(service_dir, attr, value)
+def run(command):
+    with os.popen(command) as stream:
+        return stream.read()
 
 if __name__ == '__main__': main()
