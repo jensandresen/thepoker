@@ -22,6 +22,7 @@ run: update build
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${SERVICES_DIR}:/services \
 		-e SERVICES_DIR="/services" \
+		-e HOST_SERVICES_DIR="${SERVICES_DIR}" \
 		-v $(abspath ./services.yml):/app/services.yml \
 		$(APP_NAME)
 

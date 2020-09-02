@@ -13,16 +13,22 @@ def main():
         print('No services dir has been specified.')
         quit()
 
+    host_services_root = os.environ.get('HOST_SERVICES_DIR')
+    if not services_root:
+        print('No host services dir has been specified.')
+        quit()
+
     service_configurations = load_services_configuration(configuration_filename)
 
     for service_name, configuration in service_configurations.items():
         os.chdir(services_root)
         service_dir = os.path.join(services_root, service_name)
+        host_service_dir = os.path.join(host_services_root, service_name)
 
         if os.path.isdir(service_dir):
-            update_service(service_dir, service_name, configuration)
+            update_service(host_service_dir, service_dir, service_name, configuration)
         else:
-            create_service(service_dir, service_name, configuration)
+            create_service(host_service_dir, service_dir, service_name, configuration)
 
 def get_configuration_filename():
     configuration_filenames = sys.argv[1:]
@@ -41,7 +47,7 @@ def load_service_manifest(source_root):
     content = read_yaml_file(filename)
     return content['configuration']
 
-def create_service(service_root, name, properties):
+def create_service(host_service_root, service_root, name, properties):
     print('create service ' + name)
 
     print('  building folder structure:')
@@ -74,7 +80,7 @@ def create_service(service_root, name, properties):
     print('  executing commands:')
     print('    cwd: ' + repository_dir)
 
-    env_vars = build_env_vars_from(service_root, service_manifest)
+    env_vars = build_env_vars_from(host_service_root, service_manifest)
     run_command(service_manifest, 'setup', env_vars, '    ')
     run_command(service_manifest, 'run', env_vars, '    ')
 
@@ -104,7 +110,7 @@ def run_command(service_manifest, command_name, env_vars, indentation):
     else:
         print(local_indentation + 'no command "' + command_name + '" was specified')
 
-def update_service(service_root, name, properties):
+def update_service(host_service_root, service_root, name, properties):
     print('update service ' + name)
 
     repository_dir = os.path.join(service_root, '_repository')
@@ -131,7 +137,7 @@ def update_service(service_root, name, properties):
         # first, teardown
         print('  executing teardown:')
         print('    cwd: ' + repository_dir)
-        env_vars = build_env_vars_from(service_root, service_manifest)
+        env_vars = build_env_vars_from(host_service_root, service_manifest)
         run_command(service_manifest, 'teardown', env_vars, '    ')
 
         # update repository
@@ -145,7 +151,7 @@ def update_service(service_root, name, properties):
             print('error! no service manifest was found!')
             return
             
-        env_vars = build_env_vars_from(service_root, service_manifest)
+        env_vars = build_env_vars_from(host_service_root, service_manifest)
 
         # run setup
         print('  executing setup:')
