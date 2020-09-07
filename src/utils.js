@@ -5,6 +5,8 @@ const yaml = require("yaml");
 function run(cmd) {
   return new Promise((resolve) => {
     exec(cmd, (err, stdout, stderr) => {
+      console.log(stdout);
+      console.error(stderr);
       resolve(stdout);
     });
   });
