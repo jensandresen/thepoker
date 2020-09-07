@@ -11,7 +11,6 @@ update:
 
 run: # update build
 	docker run -d \
-		--rm \
 		--name ${APP_NAME} \
 		--restart unless-stopped \
 		-p 5900:3000 \
