@@ -1,4 +1,4 @@
-FROM python:3.8.5-alpine
+FROM node:alpine
 
 RUN apk update
 RUN apk add git
@@ -7,11 +7,10 @@ RUN apk add docker
 
 WORKDIR /app
 
-COPY src/requirements.txt ./
-RUN pip install -r requirements.txt
+COPY src/package*.json ./
+RUN npm install
 
-COPY ./services.yml  ./
-
+COPY services.yml ./
 COPY src/* ./
 
-ENTRYPOINT [ "python", "app.py", "services.yml" ]
+ENTRYPOINT [ "npm", "start", "--", "services.yml" ]
