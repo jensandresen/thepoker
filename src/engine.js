@@ -175,7 +175,8 @@ async function runCommand(manifest, commandName) {
       console.log(`    *** DRY RUN MODE ***`);
       console.log(`    > ${envVars} ${cmd}`);
     } else {
-      await run(`${envVars} ${cmd}`);
+      const output = await run(`${envVars} ${cmd}`);
+      console.log("    output: ", output);
     }
   } else {
     console.log(`   no command "${commandName}" was specified`);
