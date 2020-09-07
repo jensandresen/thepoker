@@ -1,5 +1,4 @@
 APP_NAME=thepoker-engine
-SERVICES_DIR=${PWD}/test_dir
 
 build:
 	docker build -t $(APP_NAME) .
@@ -11,7 +10,7 @@ update:
 	git pull
 
 run: # update build
-	docker run -it \
+	docker run -d \
 		--rm \
 		--name ${APP_NAME} \
 		-p 3000:3000 \
@@ -19,7 +18,6 @@ run: # update build
 		-v ${SERVICES_DIR}:/services \
 		-e SERVICES_DIR="/services" \
 		-e HOST_SERVICES_DIR="${SERVICES_DIR}" \
-		-e DRY_RUN=1 \
 		-v $(abspath ./services.yml):/app/services.yml \
 		$(APP_NAME)
 
