@@ -13,7 +13,8 @@ run: # update build
 	docker run -d \
 		--rm \
 		--name ${APP_NAME} \
-		-p 3000:3000 \
+		--restart unless-stopped \
+		-p 5900:3000 \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v ${SERVICES_DIR}:/services \
 		-e SERVICES_DIR="/services" \
