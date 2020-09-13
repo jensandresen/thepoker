@@ -51,7 +51,7 @@ function buildEnvVarsFrom(serviceDefinition, manifest) {
   const directories = manifest.directories || {};
   for (let dirName in directories) {
     list.push({
-      key: `${dirName.toLocaleUpperCase()}-DIR`,
+      key: `${dirName.toLocaleUpperCase()}_DIR`,
       value: path.join(
         hostServicesRoot,
         serviceDefinition.id,
