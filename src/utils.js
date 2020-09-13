@@ -1,12 +1,15 @@
 const { exec } = require("child_process");
 const fs = require("fs");
+const path = require("path");
 const yaml = require("yaml");
 
-function run(cmd) {
+function run(cmd, showOutput = true) {
   return new Promise((resolve) => {
     exec(cmd, (err, stdout, stderr) => {
-      console.log(stdout);
-      console.error(stderr);
+      if (showOutput) {
+        console.log(stdout);
+        console.error(stderr);
+      }
       resolve(stdout);
     });
   });
@@ -68,6 +71,29 @@ async function readYamlFile(filePath) {
   });
 }
 
+function getServicesRoot() {
+  return (process.env.SERVICES_DIR || "").trim();
+}
+
+function getHostServicesRoot() {
+  return (process.env.HOST_SERVICES_DIR || "").trim();
+}
+
+function getSubDirectories(parentDir) {
+  return new Promise((resolve) => {
+    fs.readdir(parentDir, (err, entries) => {
+      if (err) {
+        resolve([]);
+      } else {
+        const subDirs = entries
+          .map((name) => path.join(parentDir, name))
+          .filter((dirPath) => fs.statSync(dirPath).isDirectory());
+        resolve(subDirs);
+      }
+    });
+  });
+}
+
 // exports
 exports.run = run;
 exports.chdir = chdir;
@@ -78,3 +104,6 @@ exports.gitMerge = gitMerge;
 exports.gitFetchChanges = gitFetchChanges;
 exports.hasGitRepositoryChanged = hasGitRepositoryChanged;
 exports.readYamlFile = readYamlFile;
+exports.getServicesRoot = getServicesRoot;
+exports.getHostServicesRoot = getHostServicesRoot;
+exports.getSubDirectories = getSubDirectories;
