@@ -22,6 +22,10 @@ run: # update build
 		-v $(abspath $(SERVICES_FILE_NAME)):/app/services.yml \
 		$(APP_NAME)
 
+teardown:
+	docker kill $(APP_NAME)
+	docker rm $(APP_NAME)
+
 clean-test-dir:
 	rm -Rf test_dir && mkdir test_dir
 
