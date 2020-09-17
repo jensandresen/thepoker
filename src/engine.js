@@ -8,7 +8,7 @@ const {
 
 const moment = require("moment");
 const path = require("path");
-const readConfiguration = require("./configuration-reader");
+const { readConfiguration } = require("./configuration-reader");
 const ServiceDefinition = require("./service-definition");
 
 const appDir = path.resolve(__dirname);

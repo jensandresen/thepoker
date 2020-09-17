@@ -71,6 +71,13 @@ async function readYamlFile(filePath) {
   });
 }
 
+async function writeYamlFile(filePath, instance) {
+  return new Promise((resolve) => {
+    const data = yaml.stringify(instance);
+    fs.writeFile(filePath, data, { encoding: "utf8" }, () => resolve());
+  });
+}
+
 function getServicesRoot() {
   return (process.env.SERVICES_DIR || "").trim();
 }
@@ -104,6 +111,7 @@ exports.gitMerge = gitMerge;
 exports.gitFetchChanges = gitFetchChanges;
 exports.hasGitRepositoryChanged = hasGitRepositoryChanged;
 exports.readYamlFile = readYamlFile;
+exports.writeYamlFile = writeYamlFile;
 exports.getServicesRoot = getServicesRoot;
 exports.getHostServicesRoot = getHostServicesRoot;
 exports.getSubDirectories = getSubDirectories;

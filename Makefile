@@ -1,4 +1,5 @@
 APP_NAME=thepoker-engine
+SERVICES_FILE_NAME=$(or ${SERVICES_FILE},./services.yml)
 
 build:
 	docker build -t $(APP_NAME) .
@@ -18,7 +19,7 @@ run: # update build
 		-v ${SERVICES_DIR}:/services \
 		-e SERVICES_DIR="/services" \
 		-e HOST_SERVICES_DIR="${SERVICES_DIR}" \
-		-v $(abspath ./services.yml):/app/services.yml \
+		-v $(abspath $(SERVICES_FILE_NAME)):/app/services.yml \
 		$(APP_NAME)
 
 clean-test-dir:

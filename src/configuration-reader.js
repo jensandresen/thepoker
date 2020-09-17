@@ -1,23 +1,18 @@
-const { readYamlFile } = require("./utils");
+const { readYamlFile, writeYamlFile } = require("./utils");
 const path = require("path");
 
+const strategies = [
+  () => process.argv[2] || "",
+  () => process.env.SERVICE_CONFIG_FILE || "",
+  () => "./services.yml",
+];
+
+const fileName = strategies.map((x) => x().trim()).find((x) => x != "");
+const configFilePath = path.resolve(fileName);
+
 async function readConfiguration() {
-  const strategies = [
-    () => process.argv[2] || "",
-    () => process.env.SERVICE_CONFIG_FILE || "",
-    () => "./services.yml",
-  ];
-
-  for (let i in strategies) {
-    const fileName = strategies[i]().trim();
-    if (fileName != "") {
-      const fullFilePath = path.resolve(fileName);
-      const cfg = await readYamlFile(fullFilePath);
-      return transformConfiguration(cfg);
-    }
-  }
-
-  return null;
+  const cfg = await readYamlFile(configFilePath);
+  return transformConfiguration(cfg);
 }
 
 function transformConfiguration(configuration) {
@@ -32,4 +27,19 @@ function transformConfiguration(configuration) {
   return result;
 }
 
-module.exports = readConfiguration;
+async function writeConfiguration(configurations) {
+  const services = {};
+
+  configurations.forEach((cfg) => {
+    const temp = { ...cfg };
+    delete temp.id;
+    services[cfg.id] = temp;
+  });
+
+  await writeYamlFile(configFilePath, {
+    services: services,
+  });
+}
+
+exports.readConfiguration = readConfiguration;
+exports.writeConfiguration = writeConfiguration;
