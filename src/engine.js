@@ -44,11 +44,15 @@ async function restoreServiceState() {
   const servicesRoot = getServicesRoot();
   const services = await getSubDirectories(servicesRoot);
 
+  console.group("Restoring service definitions...");
+
   services.forEach(async (serviceDir) => {
     const serviceDefinition = await ServiceDefinition.buildFrom(serviceDir);
     state.services.push(serviceDefinition);
-    console.log(`Restored service definition for "${serviceDefinition.id}".`);
+    console.log(`restored "${serviceDefinition.id}".`);
   });
+
+  console.groupEnd();
 }
 
 async function updateStatusOnAllServices() {
@@ -56,9 +60,9 @@ async function updateStatusOnAllServices() {
   const containerNames = result.trim().split("\n");
 
   // update status on registered services
-  state.services.forEach((x) => {
-    const name = x.getManifest().containerName;
-    x.status = containerNames.includes(name) ? "running" : "not running";
+  state.services.forEach((service) => {
+    const name = service.getManifest().containerName;
+    service.status = containerNames.includes(name) ? "running" : "not running";
   });
 }
 
