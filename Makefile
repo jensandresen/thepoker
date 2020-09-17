@@ -26,6 +26,8 @@ teardown:
 	docker kill $(APP_NAME)
 	docker rm $(APP_NAME)
 
+rerun: teardown setup run
+
 clean-test-dir:
 	rm -Rf test_dir && mkdir test_dir
 
