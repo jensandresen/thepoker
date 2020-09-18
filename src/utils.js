@@ -4,13 +4,14 @@ const path = require("path");
 const yaml = require("yaml");
 
 function run(cmd, showOutput = true) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     exec(cmd, (err, stdout, stderr) => {
-      if (showOutput) {
-        console.log(stdout);
+      if (err) {
         console.error(stderr);
+        reject(err);
+      } else {
+        resolve(stdout);
       }
-      resolve(stdout);
     });
   });
 }
