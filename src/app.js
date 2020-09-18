@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const { getServices, getStatus, getNextRun } = require("./engine");
 const {
   readConfiguration,
@@ -7,6 +8,7 @@ const {
 } = require("./configuration-reader");
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
