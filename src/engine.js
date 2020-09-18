@@ -46,11 +46,14 @@ async function restoreServiceState() {
 
   console.group("Restoring service definitions...");
 
-  services.forEach(async (serviceDir) => {
+  for (let i = 0; i < services.length; i++) {
+    const serviceDir = services[i];
     const serviceDefinition = await ServiceDefinition.buildFrom(serviceDir);
     state.services.push(serviceDefinition);
     console.log(`restored "${serviceDefinition.id}".`);
-  });
+  }
+
+  console.log("Done restoring!");
 
   console.groupEnd();
 }
@@ -110,10 +113,11 @@ async function loop() {
       );
     });
 
-  state.services.forEach(async (serviceDefinition) => {
+  for (let i = 0; i < state.services.length; i++) {
+    const serviceDefinition = state.services[i];
     await chdir(local_services_root);
     await serviceDefinition.createOrUpdate();
-  });
+  }
 }
 
 main();
