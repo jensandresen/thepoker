@@ -63,10 +63,13 @@ async function updateStatusOnAllServices() {
   const containerNames = result.trim().split("\n");
 
   // update status on registered services
-  state.services.forEach((service) => {
-    const name = service.getManifest().containerName;
+  for (let i = 0; i < state.services.length; i++) {
+    const service = state.services[i];
+
+    const manifest = await service.getManifest();
+    const name = manifest.containerName;
     service.status = containerNames.includes(name) ? "running" : "not running";
-  });
+  }
 }
 
 async function execute() {
