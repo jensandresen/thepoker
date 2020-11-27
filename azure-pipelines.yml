@@ -1,0 +1,17 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  - master
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - script: |
+      docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      docker login mondayworks.azurecr.io --username $(CD_SP_APP_ID) --password $(CD_SP_PASSWORD)
+      make cd BUILD_NUMBER=$(Build.BuildNumber)
+    displayName: "Run build, test and delivery steps"

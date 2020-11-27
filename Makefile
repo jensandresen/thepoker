@@ -1,40 +1,23 @@
-APP_NAME=thepoker-engine
-SERVICES_FILE_NAME=$(or ${SERVICES_FILE},./services.yml)
+NAME=thepoker-engine
+PLATFORM=linux/amd64
+CONTAINER_REGISTRY=mondayworks.azurecr.io
+BUILD_NUMBER:=latest
 
+.PHONY: build
+build: BUILDER=$(NAME)-builder
 build:
-	docker build -t $(APP_NAME) .
+	-docker buildx create --name $(BUILDER)
+	docker buildx build --build-arg build_number=$(BUILD_NUMBER) --platform $(PLATFORM) --builder $(BUILDER) -t $(NAME) . --load
+	docker buildx rm $(BUILDER)
 
-setup: build
+.PHONY: deliver
+deliver:
+	docker tag $(NAME):latest $(CONTAINER_REGISTRY)/$(NAME):$(BUILD_NUMBER)
+	docker push $(CONTAINER_REGISTRY)/$(NAME):$(BUILD_NUMBER)
 
-update:
-	git clean -df
-	git pull
+.PHONY: cd
+cd: PLATFORM=linux/arm/v7
+cd: build deliver
 
-run: # update build
-	docker run -d \
-		--name ${APP_NAME} \
-		--restart unless-stopped \
-		-p 4005:3000 \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		-v ${SERVICES_DIR}:/services \
-		-e SERVICES_DIR="/services" \
-		-e HOST_SERVICES_DIR="${SERVICES_DIR}" \
-		-v $(abspath $(SERVICES_FILE_NAME)):/app/services.yml \
-		$(APP_NAME)
-
-teardown:
-	docker kill $(APP_NAME)
-	docker rm $(APP_NAME)
-
-rerun: teardown setup run
-
-clean-test-dir:
-	rm -Rf test_dir && mkdir test_dir
-
-test:
-	@cd src && SERVICES_DIR=${PWD}/test_dir HOST_SERVICES_DIR=${PWD}/test_dir DRY_RUN=1 npm run start:engine -- ../services.yml
-
-test-full:
-	@cd src && SERVICES_DIR=${PWD}/test_dir HOST_SERVICES_DIR=${PWD}/test_dir DRY_RUN=1 npm run start -- ../services.yml
-
-fresh-test: clean-test-dir test
+test: 
+	docker-compose up --build

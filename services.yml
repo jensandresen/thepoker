@@ -1,3 +1,0 @@
-services:
-  skole-skema-service:
-    repository: https://github.com/jensandresen/skole-skema-service.git

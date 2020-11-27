@@ -1,0 +1,10 @@
+version: "3"
+services:
+  backend:
+    build: fake_dependencies/apply_reciever
+    ports:
+      - "3000:3000"
+  app:
+    build: .
+    environment:
+      APPLY_URL: http://backend:3000
